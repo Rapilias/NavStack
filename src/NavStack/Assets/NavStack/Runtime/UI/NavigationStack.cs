@@ -28,6 +28,7 @@ namespace NavStack.UI
             remove => core.OnPageDetached -= value;
         }
 
+        public bool IsRunning => core.IsRunning;
         public IPage ActivePage => core.ActivePage;
         public IReadOnlyCollection<IPage> Pages => core.Pages;
         public NavigationOptions DefaultOptions
