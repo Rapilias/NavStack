@@ -9,5 +9,7 @@ namespace NavStack
         UniTask PushAsync(IPage page, NavigationContext context, CancellationToken cancellationToken = default);
         UniTask PushAsync(Func<UniTask<IPage>> factory, NavigationContext context, CancellationToken cancellationToken = default);
         UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default);
+
+        public bool IsRunning { get; }
     }
 }

@@ -17,6 +17,7 @@ namespace NavStack.Internal
         public event Action<IPage> OnPageAttached;
         public event Action<IPage> OnPageDetached;
 
+        public bool IsRunning => isRunning;
         bool isRunning;
 
         public async UniTask PopAsync(INavigation navigation, NavigationContext context, CancellationToken cancellationToken = default)
