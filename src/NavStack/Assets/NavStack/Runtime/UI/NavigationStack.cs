@@ -51,6 +51,17 @@ namespace NavStack.UI
             };
         }
 
+        public void AssigneParent(IPage page)
+        {
+            if (page is Component component)
+            {
+                if (parentTransform != null)
+                {
+                    component.transform.SetParent(parentTransform, false);
+                }
+            }
+        }
+
         public UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
             return core.PopAsync(this, context, cancellationToken);

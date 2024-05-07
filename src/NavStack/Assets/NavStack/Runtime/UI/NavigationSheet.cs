@@ -50,6 +50,17 @@ namespace NavStack.UI
             };
         }
 
+        public void AssigneParent(IPage page)
+        {
+            if (page is Component component)
+            {
+                if (parentTransform != null)
+                {
+                    component.transform.SetParent(parentTransform, false);
+                }
+            }
+        }
+
         public UniTask AddAsync(IPage page, CancellationToken cancellationToken = default)
         {
             return core.AddAsync(page, cancellationToken);
