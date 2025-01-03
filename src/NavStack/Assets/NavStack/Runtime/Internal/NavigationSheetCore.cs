@@ -110,7 +110,7 @@ namespace NavStack.Internal
 
             if (activePage == null)
             {
-                throw new InvalidOperationException(); // TODO: add message
+                return;
             }
 
             if (isRunning)
