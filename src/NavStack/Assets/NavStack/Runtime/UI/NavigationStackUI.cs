@@ -33,7 +33,7 @@ namespace NavStack.UI
             add => core.OnNavigated += value;
             remove => core.OnNavigated -= value;
         }
-
+        
         public event Action<(IPage Previous, IPage Current)> OnNavigating
         {
             add => core.OnNavigating += value;
@@ -42,6 +42,8 @@ namespace NavStack.UI
 
         public IPage ActivePage => core.ActivePage;
         public IReadOnlyCollection<IPage> Pages => core.Pages;
+
+        public bool isTransitioning { get; set; }
 
         protected virtual void Awake()
         {
@@ -57,19 +59,25 @@ namespace NavStack.UI
             };
         }
 
-        public UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.PopAsync(context, cancellationToken);
+            this.isTransitioning = true;
+            await core.PopAsync(context, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask PushAsync(IPage page, NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask PushAsync(IPage page, NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.PushAsync(() => new(page), context, cancellationToken);
+            this.isTransitioning = true;
+            await core.PushAsync(() => new(page), context, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask PushAsync(Func<UniTask<IPage>> factory, NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask PushAsync(Func<UniTask<IPage>> factory, NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.PushAsync(factory, context, cancellationToken);
+            this.isTransitioning = true;
+            await core.PushAsync(factory, context, cancellationToken);
+            this.isTransitioning = false;
         }
     }
 }

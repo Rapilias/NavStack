@@ -11,5 +11,7 @@ namespace NavStack
         event Action<IPage> OnPageDetached;
         event Action<(IPage Previous, IPage Current)> OnNavigating;
         event Action<(IPage Previous, IPage Current)> OnNavigated;
+
+        bool isTransitioning { get; }
     }
 }

@@ -33,7 +33,7 @@ namespace NavStack.UI
             add => core.OnNavigated += value;
             remove => core.OnNavigated -= value;
         }
-
+        
         public event Action<(IPage Previous, IPage Current)> OnNavigating
         {
             add => core.OnNavigating += value;
@@ -42,6 +42,8 @@ namespace NavStack.UI
 
         public IReadOnlyCollection<IPage> Pages => core.Pages;
         public IPage ActivePage => core.ActivePage;
+
+        public bool isTransitioning { get; set; }
 
         protected virtual void Awake()
         {
@@ -57,29 +59,39 @@ namespace NavStack.UI
             };
         }
 
-        public UniTask AddAsync(IPage page, CancellationToken cancellationToken = default)
+        public async UniTask AddAsync(IPage page, CancellationToken cancellationToken = default)
         {
-            return core.AddAsync(page, cancellationToken);
+            this.isTransitioning = true;
+            await  core.AddAsync(page, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask RemoveAsync(IPage page, CancellationToken cancellationToken = default)
+        public async UniTask RemoveAsync(IPage page, CancellationToken cancellationToken = default)
         {
-            return core.RemoveAsync(page, cancellationToken);
+            this.isTransitioning = true;
+            await core.RemoveAsync(page, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask RemoveAllAsync(CancellationToken cancellationToken = default)
+        public async UniTask RemoveAllAsync(CancellationToken cancellationToken = default)
         {
-            return core.RemoveAllAsync(cancellationToken);
+            this.isTransitioning = true;
+            await core.RemoveAllAsync(cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask ShowAsync(int index, NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask ShowAsync(int index, NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.ShowAsync(index, context, cancellationToken);
+            this.isTransitioning = true;
+            await core.ShowAsync(index, context, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask HideAsync(NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask HideAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.HideAsync(context, cancellationToken);
+            this.isTransitioning = true;
+            await core.HideAsync(context, cancellationToken);
+            this.isTransitioning = false;
         }
     }
 }
