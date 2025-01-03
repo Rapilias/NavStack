@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -11,6 +12,22 @@ namespace NavStack
         public static UniTask ShowAsync(this INavigationSheet navigationSheet, int index, CancellationToken cancellationToken = default)
         {
             return navigationSheet.ShowAsync(index, new NavigationContext(), cancellationToken);
+        }
+
+        public static UniTask ShowAsync(this INavigationSheet navigationSheet, IPage page, CancellationToken cancellationToken = default)
+        {
+            var index = navigationSheet.Pages.FindIndex(page);
+            if(index == -1)
+                throw new IndexOutOfRangeException($"The page is not in the navigation sheet pages.");
+            return navigationSheet.ShowAsync(index, cancellationToken);
+        }
+
+        public static UniTask ShowAsync(this INavigationSheet navigationSheet, IPage page, NavigationContext context, CancellationToken cancellationToken = default)
+        {
+            var index = navigationSheet.Pages.FindIndex(page);
+            if(index == -1)
+                throw new IndexOutOfRangeException($"The page is not in the navigation sheet pages.");
+            return navigationSheet.ShowAsync(index, context, cancellationToken);
         }
 
         public static UniTask AddNewObjectAsync<T>(this INavigationSheet navigationSheet, T prefab, CancellationToken cancellationToken = default)
@@ -65,7 +82,7 @@ namespace NavStack
             return navigationSheet.HideAsync(new NavigationContext(), cancellationToken);
         }
 
-        static bool TryGetComponent<T>(UnityEngine.Object obj, out T result)
+        private static bool TryGetComponent<T>(UnityEngine.Object obj, out T result)
         {
             if (obj is GameObject gameObject)
             {
@@ -81,6 +98,17 @@ namespace NavStack
 
             result = default;
             return false;
+        }
+        
+        internal static int FindIndex<T>(this IReadOnlyCollection<T> collection, T item)
+        {
+            var i = 0;
+            foreach (var x in collection)
+            {
+                if (EqualityComparer<T>.Default.Equals(x, item)) return i;
+                i++;
+            }
+            return -1;
         }
     }
 }
