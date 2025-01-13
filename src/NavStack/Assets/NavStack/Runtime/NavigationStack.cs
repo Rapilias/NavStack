@@ -36,20 +36,27 @@ namespace NavStack
             add => core.OnNavigated += value;
             remove => core.OnNavigated -= value;
         }
-
-        public UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default)
+        public bool isTransitioning { get; private set; }
+        
+        public async UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.PopAsync(context, cancellationToken);
+            this.isTransitioning = true;
+            await core.PopAsync(context, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask PushAsync(IPage page, NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask PushAsync(IPage page, NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.PushAsync(() => new(page), context, cancellationToken);
+            this.isTransitioning = true;
+            await core.PushAsync(() => new(page), context, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask PushAsync(Func<UniTask<IPage>> factory, NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask PushAsync(Func<UniTask<IPage>> factory, NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.PushAsync(factory, context, cancellationToken);
+            this.isTransitioning = true;
+            await core.PushAsync(factory, context, cancellationToken);
+            this.isTransitioning = false;
         }
     }
 }
