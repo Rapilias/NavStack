@@ -36,30 +36,39 @@ namespace NavStack
             add => core.OnNavigated += value;
             remove => core.OnNavigated -= value;
         }
-
+        public bool isTransitioning { get; private set; } = false;
+        
         public UniTask AddAsync(IPage page, CancellationToken cancellationToken = default)
         {
             return core.AddAsync(page, cancellationToken);
         }
 
-        public UniTask HideAsync(NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask HideAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.HideAsync(context, cancellationToken);
+            this.isTransitioning = true;
+            await core.HideAsync(context, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask RemoveAllAsync(CancellationToken cancellationToken = default)
+        public async UniTask RemoveAllAsync(CancellationToken cancellationToken = default)
         {
-            return core.RemoveAllAsync(cancellationToken);
+            this.isTransitioning = true;
+            await core.RemoveAllAsync(cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask RemoveAsync(IPage page, CancellationToken cancellationToken = default)
+        public async UniTask RemoveAsync(IPage page, CancellationToken cancellationToken = default)
         {
-            return core.RemoveAsync(page, cancellationToken);
+            this.isTransitioning = true;
+            await core.RemoveAsync(page, cancellationToken);
+            this.isTransitioning = false;
         }
 
-        public UniTask ShowAsync(int index, NavigationContext context, CancellationToken cancellationToken = default)
+        public async UniTask ShowAsync(int index, NavigationContext context, CancellationToken cancellationToken = default)
         {
-            return core.ShowAsync(index, context, cancellationToken);
+            this.isTransitioning = true;
+            await core.ShowAsync(index, context, cancellationToken);
+            this.isTransitioning = false;
         }
     }
 }
