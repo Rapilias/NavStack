@@ -1,5 +1,6 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace NavStack.Scenes
@@ -29,7 +30,11 @@ namespace NavStack.Scenes
             loadType = SceneLoadType.SceneName;
             this.sceneName = sceneName;
         }
-
+        
+        /// <inheritdoc />
+        public Transform transform => null;
+        /// <inheritdoc />
+        public bool controlTransform => true;
         public UniTask OnNavigatedFrom(NavigationContext context, CancellationToken cancellationToken = default)
         {
             if (LoadOnAttached) return UniTask.CompletedTask;

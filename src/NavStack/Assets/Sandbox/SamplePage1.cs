@@ -10,6 +10,9 @@ public class SamplePage1 : MonoBehaviour, IPage, IPageStackEvent
 {
     [SerializeField] Text text;
     
+    /// <inheritdoc />
+    public bool controlTransform => true;
+
     public UniTask OnNavigatedFrom(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
     public UniTask OnNavigatedTo(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
 
