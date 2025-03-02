@@ -49,12 +49,12 @@ namespace NavStack.UI
         {
             OnPageAttached += page =>
             {
-                if (page is Component component)
+                if(! page.controlTransform || page.transform == null)
+                    return;
+                
+                if(parentTransform != null)
                 {
-                    if (parentTransform != null)
-                    {
-                        component.transform.SetParent(parentTransform, false);
-                    }
+                    page.transform.SetParent(parentTransform, false);
                 }
             };
         }
