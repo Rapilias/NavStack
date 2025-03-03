@@ -89,8 +89,8 @@ namespace NavStack.Internal
                 var prevPage = activePage;
                 activePage = page;
 
-                var task1 = prevPage == null ? UniTask.CompletedTask : prevPage.OnNavigatedFrom(copiedContext, cancellationToken);
-                var task2 = activePage.OnNavigatedTo(copiedContext, cancellationToken);
+                var task1 = prevPage == null ? UniTask.CompletedTask : prevPage.OnNavigatePop(copiedContext, cancellationToken);
+                var task2 = activePage.OnNavigatePush(copiedContext, cancellationToken);
 
                 OnNavigating?.Invoke((prevPage, activePage));
 
@@ -137,7 +137,7 @@ namespace NavStack.Internal
                 if (prevPage != null)
                 {
                     OnNavigating?.Invoke((null, prevPage));
-                    await prevPage.OnNavigatedFrom(copiedContext, cancellationToken);
+                    await prevPage.OnNavigatePop(copiedContext, cancellationToken);
                     OnNavigated?.Invoke((null, prevPage));
                 }
             }

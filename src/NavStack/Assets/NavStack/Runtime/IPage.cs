@@ -16,8 +16,22 @@ namespace NavStack
         /// <see cref="transform"/>に対する操作を行わないように要求する
         /// </summary>
         bool controlTransform { get; }
-
-        UniTask OnNavigatedFrom(NavigationContext context, CancellationToken cancellationToken = default);
-        UniTask OnNavigatedTo(NavigationContext context, CancellationToken cancellationToken = default);
+        
+        /// <summary>
+        /// このページがStackにPushされた時か、シートとしてアクティブになった呼び出される
+        /// </summary>
+        UniTask OnNavigatePush(NavigationContext context, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// このページがStackからPopされた時か、シートとして非アクティブになったに呼び出される
+        /// </summary>
+        UniTask OnNavigatePop(NavigationContext context, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// このページがStackの最後に存在し、そこに新たなページがPushされる時に呼び出される
+        /// </summary>
+        UniTask OnNavigatePushToThis(NavigationContext context, CancellationToken cancellationToken = default);
+        /// <summary>
+        /// このページがStackの最後から1つ手前に存在し、最後のページがPopされた時に呼び出される
+        /// </summary>
+        UniTask OnNavigatePopToThis(NavigationContext context, CancellationToken cancellationToken = default);
     }
 }

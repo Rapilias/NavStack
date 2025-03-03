@@ -12,10 +12,15 @@ public class SamplePage1 : MonoBehaviour, IPage, IPageStackEvent
     
     /// <inheritdoc />
     public bool controlTransform => true;
-
-    public UniTask OnNavigatedFrom(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
-    public UniTask OnNavigatedTo(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
-
+    /// <inheritdoc />
+    public UniTask OnNavigatePush(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
+    /// <inheritdoc />
+    public UniTask OnNavigatePop(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
+    /// <inheritdoc />
+    public UniTask OnNavigatePushToThis(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
+    /// <inheritdoc />
+    public UniTask OnNavigatePopToThis(NavigationContext context, CancellationToken cancellationToken = default) => UniTask.CompletedTask;
+    
     public async UniTask OnPush(NavigationContext context, CancellationToken cancellationToken = default)
     {
         text.text = context.Parameters["id"] as string;

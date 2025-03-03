@@ -35,18 +35,30 @@ namespace NavStack.Scenes
         public Transform transform => null;
         /// <inheritdoc />
         public bool controlTransform => true;
-        public UniTask OnNavigatedFrom(NavigationContext context, CancellationToken cancellationToken = default)
-        {
-            if (LoadOnAttached) return UniTask.CompletedTask;
-            return UnloadAsync(cancellationToken);
-        }
-
-        public UniTask OnNavigatedTo(NavigationContext context, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public UniTask OnNavigatePush(NavigationContext context, CancellationToken cancellationToken = default)
         {
             if (LoadOnAttached) return UniTask.CompletedTask;
             return LoadAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
+        public UniTask OnNavigatePop(NavigationContext context, CancellationToken cancellationToken = default)
+        {
+            if (LoadOnAttached) return UniTask.CompletedTask;
+            return UnloadAsync(cancellationToken);
+        }
+        /// <inheritdoc />
+        public UniTask OnNavigatePushToThis(NavigationContext context, CancellationToken cancellationToken = default)
+        {
+            if (LoadOnAttached) return UniTask.CompletedTask;
+            return UnloadAsync(cancellationToken);
+        }
+        /// <inheritdoc />
+        public UniTask OnNavigatePopToThis(NavigationContext context, CancellationToken cancellationToken = default)
+        {
+            if (LoadOnAttached) return UniTask.CompletedTask;
+            return LoadAsync(cancellationToken);
+        }
         public UniTask OnAttached(CancellationToken cancellationToken = default)
         {
             if (!LoadOnAttached) return UniTask.CompletedTask;
