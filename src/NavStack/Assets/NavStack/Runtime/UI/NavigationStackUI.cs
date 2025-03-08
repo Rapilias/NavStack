@@ -12,7 +12,8 @@ namespace NavStack.UI
     [RequireComponent(typeof(RectTransform))]
     public class NavigationStackUI : MonoBehaviour, INavigationStack
     {
-        [SerializeField] RectTransform parentTransform;
+        [SerializeField] 
+        protected RectTransform parentTransform;
 
         readonly NavigationStackCore core = new();
 
