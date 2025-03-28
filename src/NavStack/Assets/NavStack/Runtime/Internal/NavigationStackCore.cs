@@ -16,6 +16,7 @@ namespace NavStack.Internal
 
         public event Action<IPage> OnPageAttached;
         public event Action<IPage> OnPageDetached;
+        public event Action<(IPage Previous, IPage Current)> OnNavigateStarted;
         public event Action<(IPage Previous, IPage Current)> OnNavigating;
         public event Action<(IPage Previous, IPage Current)> OnNavigated;
 
@@ -51,6 +52,8 @@ namespace NavStack.Internal
                     await stackEvent.OnPop(copiedContext, cancellationToken);
                 }
                 pageStack.TryPeek(out activePage);
+                
+                OnNavigateStarted?.Invoke((page, activePage));
 
                 var task1 = page.OnNavigatePop(copiedContext, cancellationToken);
                 var task2 = activePage == null ? UniTask.CompletedTask : activePage.OnNavigatePopToThis(copiedContext, cancellationToken);
@@ -112,6 +115,8 @@ namespace NavStack.Internal
                 var prevPage = activePage;
                 activePage = page;
 
+                OnNavigateStarted?.Invoke((prevPage, activePage));
+                
                 var task1 = prevPage == null ? UniTask.CompletedTask : prevPage.OnNavigatePushToThis(copiedContext, cancellationToken);
                 var task2 = activePage.OnNavigatePush(copiedContext, cancellationToken);
 
