@@ -29,20 +29,4 @@ public class Sandbox : MonoBehaviour
             })
             .AddTo(this);
     }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            var context = new NavigationContext();
-            context.Parameters["id"] = "user" + Random.Range(0, 100);
-            navigation.PushNewObjectAsync("SamplePage1", context, ResourceProvider.Addressables, false, destroyCancellationToken).Forget();
-            Debug.Break();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            navigation.PopAsync(destroyCancellationToken).Forget();
-        }
-    }
 }
