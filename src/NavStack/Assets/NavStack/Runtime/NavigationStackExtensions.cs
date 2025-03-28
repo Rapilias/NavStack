@@ -31,7 +31,7 @@ namespace NavStack
             {
                 LastSelection = currentSelection,
             };
-            return navigationStack.PopAsync(currentSelection, cancellationToken);
+            return navigationStack.PopAsync(context, cancellationToken);
         }
     }
 }
