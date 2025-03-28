@@ -24,7 +24,12 @@ namespace NavStack
             add => core.OnPageDetached += value;
             remove => core.OnPageDetached -= value;
         }
-
+        public event Action<(IPage Previous, IPage Current)> OnNavigateStarted
+        {
+            add => core.OnNavigateStarted += value;
+            remove => core.OnNavigateStarted -= value;
+        }
+        
         public event Action<(IPage Previous, IPage Current)> OnNavigating
         {
             add => core.OnNavigating += value;
