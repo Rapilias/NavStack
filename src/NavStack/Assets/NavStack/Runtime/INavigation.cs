@@ -9,9 +9,11 @@ namespace NavStack
         IReadOnlyCollection<IPage> Pages { get; }
         event Action<IPage> OnPageAttached;
         event Action<IPage> OnPageDetached;
-        event Action<(IPage Previous, IPage Current)> OnNavigateStarted;
+        event Action<(IPage Previous, IPage Current)> OnNavigateStart;
         event Action<(IPage Previous, IPage Current)> OnNavigating;
         event Action<(IPage Previous, IPage Current)> OnNavigated;
+        event Action OnTransitionStart;
+        event Action OnTransitionFinished;
 
         bool isTransitioning { get; }
     }

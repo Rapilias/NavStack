@@ -25,7 +25,7 @@ namespace NavStack
             remove => core.OnPageDetached -= value;
         }
 
-        public event Action<(IPage Previous, IPage Current)> OnNavigateStarted
+        public event Action<(IPage Previous, IPage Current)> OnNavigateStart
         {
             add => core.OnNavigateStarted += value;
             remove => core.OnNavigateStarted -= value;
@@ -42,6 +42,9 @@ namespace NavStack
             add => core.OnNavigated += value;
             remove => core.OnNavigated -= value;
         }
+        public event Action OnTransitionStart = delegate { };
+        public event Action OnTransitionFinished = delegate { };
+        
         public bool isTransitioning { get; private set; } = false;
         
         public UniTask AddAsync(IPage page, CancellationToken cancellationToken = default)
@@ -51,30 +54,38 @@ namespace NavStack
 
         public async UniTask HideAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.HideAsync(context, cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
 
         public async UniTask RemoveAllAsync(CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.RemoveAllAsync(cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
 
         public async UniTask RemoveAsync(IPage page, CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.RemoveAsync(page, cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
 
         public async UniTask ShowAsync(int index, NavigationContext context, CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.ShowAsync(index, context, cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
     }
 }
