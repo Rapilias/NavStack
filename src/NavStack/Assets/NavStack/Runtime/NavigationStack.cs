@@ -24,7 +24,7 @@ namespace NavStack
             add => core.OnPageDetached += value;
             remove => core.OnPageDetached -= value;
         }
-        public event Action<(IPage Previous, IPage Current)> OnNavigateStarted
+        public event Action<(IPage Previous, IPage Current)> OnNavigateStart
         {
             add => core.OnNavigateStarted += value;
             remove => core.OnNavigateStarted -= value;
@@ -41,27 +41,35 @@ namespace NavStack
             add => core.OnNavigated += value;
             remove => core.OnNavigated -= value;
         }
+        public event Action OnTransitionStart = delegate { };
+        public event Action OnTransitionFinished = delegate { };
         public bool isTransitioning { get; private set; }
         
         public async UniTask PopAsync(NavigationContext context, CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.PopAsync(context, cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
 
         public async UniTask PushAsync(IPage page, NavigationContext context, CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.PushAsync(() => new(page), context, cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
 
         public async UniTask PushAsync(Func<UniTask<IPage>> factory, NavigationContext context, CancellationToken cancellationToken = default)
         {
+            this.OnTransitionStart.Invoke();
             this.isTransitioning = true;
             await core.PushAsync(factory, context, cancellationToken);
             this.isTransitioning = false;
+            this.OnTransitionFinished.Invoke();
         }
     }
 }
